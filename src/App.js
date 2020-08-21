@@ -2,8 +2,9 @@ import React, { Component } from "react"
 import Navi from "./Navi"
 import ProductList from "./ProductList"
 // reactstrap kullanarak satir ve sutunlar olustur.
-import { Container, Row, Col } from "reactstrap"
-import CategoryList from "./CategoryList"
+import { Container, Row, Col } from "reactstrap";
+import CategoryList from "./CategoryList";
+import alertify from "alertifyjs";
 
 class App extends Component {
   state = {
@@ -49,6 +50,8 @@ class App extends Component {
       newCart.push({product:product, quantity:1})
     } 
     this.setState({cart:newCart})
+    // kullaniciya seepete eklenen urun hakkinda bilgi ver.
+    alertify.success(product.productName + " added to cart.", 2);
   }
 
   removeFromCart = product => {

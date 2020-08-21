@@ -22,13 +22,13 @@ class App extends Component {
     this.getProducts(category.id)
   }
 
-  // API'den datayi al, json formatina ceir, "products" listesine ekle.
+  // API'den datayi al, json formatina cevir, "products" listesine ekle.
   getProducts = categoryId => {
     let url = "http://localhost:3000/products";
     // "categoryId" parametre olarak gonderildiyse yani "defined" ise 
     // gonderilen "categoryId" yi Url'e ekle.
     if(categoryId){
-      url += "?categoryId=" + categoryId;
+      url += "?categoryId=" + categoryId; 
     }
     fetch(url)
       .then((response) => response.json())

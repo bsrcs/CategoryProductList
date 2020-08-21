@@ -8,7 +8,8 @@ import CategoryList from "./CategoryList"
 class App extends Component {
   state = {
     currentCategory: "",
-    products: []
+    products: [],
+    cart: []
   }
   componentDidMount() {
     this.getProducts()
@@ -17,22 +18,37 @@ class App extends Component {
   // React'da bu iki component arasinda veri tasima yok.
   changeCategory = (category) => {
     this.setState({ currentCategory: category.categoryName })
-     // kategoriye tikladigimda ilgili urunlerin ona gore listelenmesini istiyorum.
-     // yani kategoriye tikladigimda "getProducts" bir kez daha calisacak.
+    // kategoriye tikladigimda ilgili urunlerin ona gore listelenmesini istiyorum.
+    // yani kategoriye tikladigimda "getProducts" bir kez daha calisacak.
     this.getProducts(category.id)
   }
 
   // API'den datayi al, json formatina cevir, "products" listesine ekle.
-  getProducts = categoryId => {
-    let url = "http://localhost:3000/products";
-    // "categoryId" parametre olarak gonderildiyse yani "defined" ise 
+  getProducts = (categoryId) => {
+    let url = "http://localhost:3000/products"
+    // "categoryId" parametre olarak gonderildiyse yani "defined" ise
     // gonderilen "categoryId" yi Url'e ekle.
-    if(categoryId){
-      url += "?categoryId=" + categoryId; 
+    if (categoryId) {
+      url += "?categoryId=" + categoryId
     }
     fetch(url)
       .then((response) => response.json())
       .then((data) => this.setState({ products: data }))
+  }
+
+  // product listten secilen urunun adini ve miktarini al.
+  addToCart = (product) => {
+    let newCart = this.state.cart;
+    // eger urun onceden secilip sepete konulduysa sadece miktarini artir.
+    var addedItem = newCart.find(cartItem => cartItem.product.id === product.id);
+    if(addedItem){
+      addedItem.quantity += 1;
+    }
+    // eger urun onceden secilmediyse newCart'a product ve quantity ata.
+    else{
+      newCart.push({product:product, quantity:1})
+    } 
+    this.setState({cart:newCart})
   }
 
   render() {
@@ -43,9 +59,7 @@ class App extends Component {
     return (
       <div className="App">
         <Container>
-          <Row>
-            <Navi />
-          </Row>
+          <Navi cart={this.state.cart} />
           <Row>
             <Col xs="3">
               {/* "changeCategory" fonk.u "CategoryList"'de tiklanabilsin diye bu eventi oraya degisken olarak gonderdim. */}
@@ -59,6 +73,7 @@ class App extends Component {
               {/* props ile products stateiını yolla. */}
               <ProductList
                 products={this.state.products}
+                addToCart={this.addToCart}
                 currentCategory={this.state.currentCategory}
                 info={productInfo}
               />

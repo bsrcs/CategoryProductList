@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
 
 class ProductList extends Component {
   render() {
@@ -15,6 +15,7 @@ class ProductList extends Component {
               <th>Product Name</th>
               <th>Quantity</th>
               <th>Price</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -24,6 +25,7 @@ class ProductList extends Component {
               <td>{product.productName}</td>
               <td>{product.quantityPerUnit}</td>
               <td>{product.unitPrice}</td>
+              <td><Button onClick={ ()=> {this.props.addToCart(product)}} color="info">Add to Cart</Button></td>
             </tr>
           ))}
           </tbody>

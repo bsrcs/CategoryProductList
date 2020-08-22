@@ -10,6 +10,7 @@ import {
   NavbarText
 } from 'reactstrap';
 import CartSummary from './CartSummary';
+import {Link} from "react-router-dom"
 
 class Navi extends Component {
   state ={
@@ -26,7 +27,9 @@ class Navi extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">Components</NavLink>
+                <NavLink>
+                  <Link to="form1">Form Demo1</Link>
+                </NavLink>
               </NavItem>
               <CartSummary removeFromCart={this.props.removeFromCart} cart={this.props.cart} />
             </Nav>

@@ -2,15 +2,18 @@ import React, { Component } from "react"
 import Navi from "./Navi"
 import ProductList from "./ProductList"
 // reactstrap kullanarak satir ve sutunlar olustur.
-import { Container, Row, Col } from "reactstrap";
-import CategoryList from "./CategoryList";
-import alertify from "alertifyjs";
+import { Container, Row, Col } from "reactstrap"
+import CategoryList from "./CategoryList"
+import alertify from "alertifyjs"
+import { Switch, Route } from "react-router-dom"
+import NotFound from "./NotFound"
+import CartList from "./CartList"
 
 class App extends Component {
   state = {
     currentCategory: "",
     products: [],
-    cart: []
+    cart: [],
   }
   componentDidMount() {
     this.getProducts()
@@ -39,26 +42,28 @@ class App extends Component {
 
   // product listten secilen urunun adini ve miktarini al.
   addToCart = (product) => {
-    let newCart = this.state.cart;
+    let newCart = this.state.cart
     // eger urun onceden secilip sepete konulduysa sadece miktarini artir.
-    var addedItem = newCart.find(cartItem => cartItem.product.id === product.id);
-    if(addedItem){
-      addedItem.quantity += 1;
+    var addedItem = newCart.find(
+      (cartItem) => cartItem.product.id === product.id
+    )
+    if (addedItem) {
+      addedItem.quantity += 1
     }
     // eger urun onceden secilmediyse newCart'a product ve quantity ata.
-    else{
-      newCart.push({product:product, quantity:1})
-    } 
-    this.setState({cart:newCart})
+    else {
+      newCart.push({ product: product, quantity: 1 })
+    }
+    this.setState({ cart: newCart })
     // kullaniciya seepete eklenen urun hakkinda bilgi ver.
-    alertify.success(product.productName + " added to cart.", 2);
+    alertify.success(product.productName + " added to cart.", 2)
   }
 
-  removeFromCart = product => {
-      let newCart = this.state.cart.filter( c => c.product.id !== product.id);
-      this.setState({cart:newCart});
+  removeFromCart = (product) => {
+    // sepetteki her bir eleman icin, gondermis oldugum id'nin disindakileri filtre.
+    let newCart = this.state.cart.filter((c) => c.product.id !== product.id)
+    this.setState({ cart: newCart })
   }
-
 
   render() {
     // datayi object seklinde tutarsam daha sonra eklemem gereken bir props olursa
@@ -79,13 +84,34 @@ class App extends Component {
               />
             </Col>
             <Col xs="9">
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={(props) => (
+                    <ProductList
+                      {...props}
+                      products={this.state.products}
+                      addToCart={this.addToCart}
+                      currentCategory={this.state.currentCategory}
+                      info={productInfo}
+                    />
+                  )}
+                ></Route>
+                 <Route
+                  exact
+                  path="/cart"
+                  render={(props) => (
+                    <CartList
+                      {...props}
+                      cart={this.state.cart}
+                      removeFromCart={this.removeFromCart}
+                    />
+                  )}
+                ></Route>
+                <Route component={NotFound}></Route>
+              </Switch>
               {/* props ile products stateiını yolla. */}
-              <ProductList
-                products={this.state.products}
-                addToCart={this.addToCart}
-                currentCategory={this.state.currentCategory}
-                info={productInfo}
-              />
             </Col>
           </Row>
         </Container>

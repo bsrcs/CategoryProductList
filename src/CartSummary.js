@@ -44,7 +44,7 @@ class CartSummary extends Component {
       </NavItem>
     )
   }
-  // seppette eleman yoksa "Your Card" kismi gorunmesin.
+  // seppette eleman yoksa "Empty Cart", eleman varsa"Your Cart" kismi gelsin.
   render() {
     return <>
     {this.props.cart.length>0 ? this.renderSummary() : this.renderEmptyCart()}

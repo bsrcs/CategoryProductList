@@ -56,13 +56,14 @@ class App extends Component {
     }
     this.setState({ cart: newCart })
     // kullaniciya seepete eklenen urun hakkinda bilgi ver.
-    alertify.success(product.productName + " added to cart.", 2)
+    alertify.success(product.productName + " added to cart.", 1)
   }
 
   removeFromCart = (product) => {
     // sepetteki her bir eleman icin, gondermis oldugum id'nin disindakileri filtre.
     let newCart = this.state.cart.filter((c) => c.product.id !== product.id)
     this.setState({ cart: newCart })
+    alertify.error(product.productName + " removed from cart.", 1)
   }
 
   render() {
